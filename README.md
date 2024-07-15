@@ -23,3 +23,4 @@ At this point the loader as well as a basic payload should be ready.
 
 - Make a builder script that simplifys creation of the JSON and binary.
 - Remove dependancy on https://github.com/D3Ext/maldev/ to reduce built binary size.
+- Come up with a better name for the damned thing.
