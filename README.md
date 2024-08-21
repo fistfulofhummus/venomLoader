@@ -20,3 +20,5 @@ Keep in mind that the config is a json file that should be located in the same d
 - Make a builder that automates creation of msf payload and base64 encoding it.
 - Remove dependancy on https://github.com/D3Ext/maldev/ to reduce built binary size.
 - Come up with a better name for the damned thing.
+
+Test
